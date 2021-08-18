@@ -2,7 +2,7 @@
 title:               Projeto - Visualização de Dados
 tagline:             ''
 description:         Página para o projeto final da disciplina de Visualização de Dados
-baseurl:             ''
+baseurl:             'https://felipelrib.github.io/ProjetoVD'
 paginate:            5
 permalink:           pretty
 
