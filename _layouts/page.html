@@ -3,6 +3,8 @@ layout: default
 ---
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript">
+  window.filters = {};
+
   function loadMoviesData() {
     return new Promise((resolve, reject) => {
       const pageContentElement = document.getElementById("page-content");
@@ -17,6 +19,29 @@ layout: default
         window.moviesData = data;
         resolve();
       });
+    });
+  }
+
+  function addListener(inputName, callback) {
+    input = document.querySelector(`input[name=${inputName}]`);
+    timeoutEvent = null;
+    input.addEventListener('change', event => {
+      if (timeoutEvent) {
+        clearTimeout(timeoutEvent);
+      }
+      timeoutEvent = setTimeout(_ => {
+        if (!event.target.value) {
+          delete window.filters[inputName];
+        } else {
+          if (input.type === "number") {
+            window.filters[inputName] = parseFloat(event.target.value);
+          } else {
+            window.filters[inputName] = event.target.value;
+          }
+        }
+        timeoutEvent = null;
+        callback();
+      }, 250);
     });
   }
 </script>
