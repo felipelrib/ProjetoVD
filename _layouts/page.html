@@ -2,7 +2,31 @@
 layout: default
 ---
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript">
+  function loadMoviesData() {
+    return new Promise((resolve, reject) => {
+      const pageContentElement = document.getElementById("page-content");
+      const loadingContainerElement = document.getElementById("loading-container");
+      const pageContentPreviousDisplay = pageContentElement.style.display
+      const loadingContainerPreviousDisplay = loadingContainerElement.style.display
+      pageContentElement.style.display = "none";
+      loadingContainerElement.style.display = loadingContainerPreviousDisplay;
+      fetch("https://dl.dropbox.com/s/7y9nhd8nwzl96or/movies_metadata.json").then(response => response.json()).then(data => {
+        pageContentElement.style.display = pageContentPreviousDisplay;
+        loadingContainerElement.style.display = "none";
+        window.moviesData = data;
+        resolve();
+      });
+    });
+  }
+</script>
 <div class="page">
   <h1 class="page-title">{{ page.title }}</h1>
-  {{ content }}
+  <div id="loading-container">
+    <div class="loader"></div>
+    <div>Carregando visualização. Por favor, aguarde...</div>
+  </div>
+  <div id="page-content">
+    {{ content }}
+  </div>
 </div>

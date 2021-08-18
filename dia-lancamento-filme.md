@@ -3,26 +3,26 @@ layout: page
 title: Data de lançamento de um filme
 ---
 <script type="text/javascript">
-  fetch("https://dl.dropbox.com/s/7y9nhd8nwzl96or/movies_metadata.json").then(response => response.json()).then(data => {
-    const chartData = data.reduce((chartData, row) => {
-      if (row.release_date) {
-            const releaseDate = new Date(row.release_date);
-            if (releaseDate instanceof Date && isFinite(releaseDate)) {
-                // Tries to fix a problem due to the date being created in UTC timezone.
-                releaseDate.setHours(releaseDate.getHours() + 12);
-                chartData[releaseDate.getDay()][1]++;
+    loadMoviesData().then(_ => {
+        const chartData = moviesData.reduce((chartData, row) => {
+        if (row.release_date) {
+                const releaseDate = new Date(row.release_date);
+                if (releaseDate instanceof Date && isFinite(releaseDate)) {
+                    // Tries to fix a problem due to the date being created in UTC timezone.
+                    releaseDate.setHours(releaseDate.getHours() + 12);
+                    chartData[releaseDate.getDay()][1]++;
+                }
             }
-        }
-        return chartData;
-    }, [
-      ["Domingo", 0],
-      ["Segunda", 0],
-      ["Terça", 0],
-      ["Quarta", 0],
-      ["Quinta", 0],
-      ["Sexta", 0],
-      ["Sábado", 0]
-  ]);
+            return chartData;
+        }, [
+        ["Domingo", 0],
+        ["Segunda", 0],
+        ["Terça", 0],
+        ["Quarta", 0],
+        ["Quinta", 0],
+        ["Sexta", 0],
+        ["Sábado", 0]
+    ]);
     const totalValidDates = chartData.reduce((sum, day) => sum + day[1], 0);
     // Get the percentage of each day.
     chartData.forEach(day => day[1] = day[1] * 100 / totalValidDates);
@@ -55,8 +55,11 @@ title: Data de lançamento de um filme
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y:.1f}%</b>'
         },
+        credits: {
+            enabled: false
+        },
         series: [{
-            name: 'Dia da semana',
+            name: 'Porcentagem de filmes lançados no dia',
             data: chartData,
             dataLabels: {
                 enabled: true,
