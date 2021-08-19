@@ -16,7 +16,7 @@ title: Data de lançamento de um filme
                 }
             }
             return chartData;
-            }, [
+        }, [
             ["Domingo", 0],
             ["Segunda", 0],
             ["Terça", 0],
